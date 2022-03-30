@@ -1,0 +1,10 @@
+{
+	"deployment": {
+		"name": "osync",
+		"stack": "java8",
+		"type": "advancedio"
+	},
+	"execution": {
+		"main": "OsyncRequestHandler"
+	}
+}

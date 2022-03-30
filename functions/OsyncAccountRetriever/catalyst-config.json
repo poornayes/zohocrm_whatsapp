@@ -1,0 +1,10 @@
+{
+	"deployment": {
+		"name": "OsyncAccountRetriever",
+		"stack": "java8",
+		"type": "basicio"
+	},
+	"execution": {
+		"main": "OsyncAccountRetriever"
+	}
+}

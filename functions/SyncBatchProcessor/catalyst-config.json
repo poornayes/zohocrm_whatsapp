@@ -1,0 +1,10 @@
+{
+	"deployment": {
+		"name": "SyncBatchProcessor",
+		"stack": "java8",
+		"type": "basicio"
+	},
+	"execution": {
+		"main": "SyncBatchProcessor"
+	}
+}

@@ -1,0 +1,44 @@
+HELP.md
+.gradle
+build/
+.build/
+bin/
+.output/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+catalyst-debug.log
+### STS ###
+.apt_generated
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.class
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+**/.DS_Store
+.DS_Store
+nohup.out
+node_modules/**
+functions/osync-data-sync-cron/lib/**
+functions/osync-data-sync-cron/xyz/**
+package-lock.json
+functions/osync-data-sync-cron/.classpath
+client/index.html

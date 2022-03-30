@@ -1,0 +1,9 @@
+{
+	"name": "osync_cron_handler",
+	"version": "1.0.0",
+	"main": "osync_cron_handler.js",
+	"author": "andrew@oapps.xyz",
+	"dependencies": {
+		"zcatalyst-sdk-node": "^1.4.0"
+	}
+}

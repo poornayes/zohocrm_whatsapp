@@ -1,0 +1,10 @@
+{
+	"deployment": {
+		"name": "osync_cron_handler",
+		"stack": "node10",
+		"type": "cron"
+	},
+	"execution": {
+		"main": "osync_cron_handler.js"
+	}
+}

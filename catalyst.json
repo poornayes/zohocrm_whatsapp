@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "targets": [
+      "osync",
+      "osync_cron_handler",
+      "OsyncAccountRetriever",
+      "SyncBatchProcessor"
+    ],
+    "ignore": [
+      ".output",
+      ".project",
+      ".classpath"
+    ],
+    "source": "functions"
+  },
+  "client": {
+    "source": "client"
+  }
+}

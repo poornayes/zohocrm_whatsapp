@@ -1,0 +1,44 @@
+{
+  "defaults": {
+    "project": 1,
+    "env": 1
+  },
+  "actives": {
+    "project": 1,
+    "env": 1
+  },
+  "projects": [
+    {
+      "idx": 1,
+      "id": 4344000000123014,
+      "name": "Osync-AdvancedIO",
+      "domain": {
+        "id": 10020328590,
+        "name": "osync-advancedio-701822429.development"
+      },
+      "env": [
+        {
+          "idx": 1,
+          "id": "701822429",
+          "name": "Development",
+          "type": 3
+        },
+        {
+          "idx": 2,
+          "id": "10021282347",
+          "name": "Production",
+          "type": 1
+        }
+      ]
+    }
+  ],
+  "migration": {
+    "1.0.2": {
+      "completed": true
+    },
+    "last_success": "1.4.0",
+    "1.4.0": {
+      "completed": true
+    }
+  }
+}
