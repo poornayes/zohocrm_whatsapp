@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,700,300italic"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="lib/style/phone-verifier.css" crossorigin="anonymous">
+</head>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="lib/ZohoEmbededAppSDK.min.js"></script>
+<script type="text/javascript" src="lib/phoneVerfierSDK.js"></script>
+<script type="text/javascript" src="lib/mustache.min.js"></script>
+
+<script type="x-tmpl-mustache" id="verifiedListView">
+
+    {{#.}}
+        <tr>
+            <td class="p-2"> {{key}} </td>
+            <td class="p-2"> {{value}} </td>
+        </tr>
+    {{/.}}                    
+                    
+</script>
+
+<body>
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col p-5" id="phoneCardColumn">
+                <div style="z-index: 7;margin-left: 175px;position: absolute;" id="phoneCardStamp">
+
+                </div>
+                <div class="card border mb-3" style="width: 100%;">
+                    <div class="card-header"> Phone :
+                        <span id="phoneNumber"></span>
+                    </div>
+                    <div class="card-body text">
+                        <div id="loadingPhoneCardDiv"
+                            class="d-flex align-items-center justify-content-center m-5 p-5">
+                            <div class="spinner-grow" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <table class="table table-striped">
+                            <thead id="phoneCard">
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col p-5" id="mobileCardColumn">
+                <div style="z-index: 7;margin-left: 175px;position: absolute;" id="mobileCardStamp">
+
+                </div>
+                <div class="card border mb-3" style="width: 100%;">
+                    <div class="card-header"> Mobile :
+                        <span id="mobNumber"></span>
+                    </div>
+                    <div class="card-body text">
+                        <div id="loadingMobileCardDiv"
+                            class="d-flex align-items-center justify-content-center m-5 p-5">
+                            <div class="spinner-grow" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <table class="table table-striped">
+                            <thead id="mobileCard">
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

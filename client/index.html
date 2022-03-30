@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+
+
+    <script aysnc="true" src="lib/mustache.min.js"></script>
+    <link rel="stylesheet" href="style/oSyncStyle.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+
+    <script aysnc="true" src="lib/oSyncMappingSDK.js"></script>
+
+    <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+      <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> -->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OsyncClient</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script aysnc="true" src="lib/oSyncData.js"></script>
+    <script aysnc="true" src="lib/oSyncGlobalVariables.js"></script>
+    <script aysnc="true" src="lib/ServiceController.js"></script>
+    <script aysnc="true" src="lib/ZohoCRMController.js"></script>
+    <script aysnc="true" src="lib/FreshDeskController.js"></script>
+    <script aysnc="true" src="lib/DefaultController.js"></script>
+    <script aysnc="true" src="lib/ZohoEmbededAppSDK.min.js"></script>
+
+    <script aysnc="true" src="lib/oSyncUtils.js"></script>
+    <script aysnc="true" src="lib/osyncAuthPage.js"></script>
+    <script aysnc="true" src="lib/oSyncFieldMapPage.js"></script>
+    <script aysnc="true" src="lib/oSyncModulePage.js"></script>
+    <script aysnc="true" src="lib/oSyncReport.js"></script>
+    <script aysnc="true" src="lib/oSyncSettingsConf.js"></script>
+
+
+    <script>
+      window.onload = function () {
+        showCommonLoading("Fasten your seat belt. Landing you shortly.");
+        getNameSpaceKey().then(function () {
+          providerObj = ServiceController.getAssigner(nameSpace);
+          providerObj.init().then(function () {
+            assignOsyncValues().then(function () {
+              oSyncId = oSyncDataObj.osyncId;
+              if (oSyncId != null && oSyncId != undefined && oSyncId != "") {
+                overAllSyncReport(true)
+              }
+            });
+          });
+        });
+
+
+        function displayMessage(evt) {
+          console.log(evt.origin);
+          if (evt.origin != "https://8wwnpsl8i1.execute-api.us-east-2.amazonaws.com") {
+            return;
+          }
+          var message;
+          var evtData = JSON.parse(evt.data);
+          var serviceId = evtData.data.serviceId;
+          var emailId = evtData.data.userEmail;
+          showRevokeButton(serviceId, emailId);
+        }
+
+        if (window.addEventListener) {
+          window.addEventListener("message", displayMessage, false);
+        } else {
+          window.attachEvent("onmessage", displayMessage);
+        }
+      }
+    </script>
+
+  </head>
+
+<body data-gr-c-s-loaded="true" style="height: 100%;">
+  <div class="modal fade" id="revokeConfirmationBox" tabindex="-1" role="dialog"
+    aria-labelledby="revokeConfirmationBoxTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="revokeConfirmationBoxTitle">Confirm Box</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <span id="generalTextMessage">
+            Revoking the authtoken will stop all the sync process for this extension.
+          </span>
+          <br><br>
+          <strong id="strongConfirmationBoxMessage">
+            Are you sure want to revoke?
+          </strong>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="confirmBoxRevokeBtn"
+            onClick="revokeAction(this)">Revoke</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="apiKeyModal" tabindex="-1" role="dialog" aria-labelledby="apiKeyModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLongTitle">Save Api key</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group" id="domainUrlInputDiv" style="display: none;">
+            <label for="domainUrlInput">Domain URL</label>
+            <input type="text" class="form-control" id="domainUrlInput" aria-describedby="domainUrlHelpLabel"
+              placeholder="Enter Domain URL">
+            <small id="domainUrlHelpLabel" class="form-text text-muted">Enter your URL https://xxx.yyy.com</small>
+          </div>
+          <div class="form-group" id="apiKeyInputDiv">
+            <label for="apiKeyInput">API Key</label>
+            <input type="text" class="form-control" id="apiKeyInput" aria-describedby="apiKeyHelpLabel"
+              placeholder="Enter API Key">
+            <small id="apiKeyHelpLabel" class="form-text text-muted">We'll never share your apikey with anyone
+              else.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="apiKeySave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mainLoader" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" style="display: none;background: #0a0a00;opacity: 0.5;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="border: 0;background: transparent;">
+        <div class="modal-body text-center" style="background: none;opacity: 1;">
+          <div class="lds-grid">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <h6 id="progressMessage" class="mt-3" data-text="Loading Zoho CRM Fields...">Loading Zoho CRM Fields...
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="background-color: #59606D !important;">
+    <a class="navbar-brand" href="#">OSync</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="showHomePage(this);">Home <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showContactOsyncPage(this)">Contact Osync<span
+              class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="landingPage" style="display: none;">
+    <div class='box'>
+      <div class='wave -one'></div>
+      <div class='wave -two'></div>
+      <div class='wave -three'></div>
+    </div>
+    <div>
+      <div class="text-dark d-flex justify-content-center">
+        <div class="container  d-flex  justify-content-center">
+          <div class="row d-flex align-items-center">
+            <div class="col-3 mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="8em" height="8em"
+                viewBox="0 0 190.000000 151.000000" preserveAspectRatio="xMidYMid meet">
+                <metadata>
+                  Created by potrace 1.16, written by Peter Selinger 2001-2019
+                </metadata>
+                <g transform="translate(0.000000,151.000000) scale(0.100000,-0.100000)" fill="currentColor"
+                  stroke="none">
+                  <path
+                    d="M785 1433 c-41 -21 -81 -60 -118 -113 -17 -25 -56 -76 -87 -115 -32 -38 -76 -98 -98 -131 -29 -43 -50 -64 -69 -69 -53 -13 -133 -67 -168 -112 -55 -73 -78 -144 -79 -248 -1 -123 16 -178 75 -237 84 -84 100 -88 323 -88 191 0 195 0 202 22 12 38 -18 48 -145 49 -64 0 -153 4 -198 7 -80 7 -83 8 -128 52 -58 57 -68 90 -63 209 3 72 9 106 25 137 31 58 92 109 163 135 59 21 64 26 116 106 69 104 98 139 148 174 65 48 123 34 253 -57 60 -41 68 -44 96 -35 87 31 176 -12 234 -111 27 -47 42 -60 97 -87 82 -40 159 -121 175 -185 32 -127 -4 -239 -94 -288 -28 -16 -75 -35 -105 -44 -68 -20 -81 -32 -69 -61 10 -28 17 -28 97 -4 85 26 144 62 188 117 21 25 55 54 77 65 64 33 82 86 82 244 0 117 -3 135 -25 179 -32 66 -116 148 -184 180 -42 20 -61 37 -81 71 -31 52 -79 97 -137 126 -35 18 -53 21 -106 16 -63 -6 -65 -6 -125 36 -106 72 -207 94 -272 60z m160 -77 c28 -13 75 -42 105 -65 34 -26 60 -39 70 -35 8 4 40 9 70 11 49 4 60 1 103 -27 29 -20 59 -52 80 -87 26 -44 43 -60 90 -84 72 -37 142 -100 170 -154 18 -33 21 -57 21 -135 0 -52 -6 -115 -14 -140 l-14 -45 -12 80 c-25 155 -61 209 -194 295 -48 30 -91 67 -109 93 -68 98 -145 141 -245 136 -54 -3 -68 0 -102 22 -55 37 -122 70 -167 84 -21 6 -39 15 -40 20 -4 18 66 55 102 55 20 0 59 -11 86 -24z">
+                  </path>
+                  <path
+                    d="M702 593 c-7 -2 -17 -13 -22 -24 -16 -29 -2 -51 96 -154 29 -32 56 -66 59 -76 4 -10 26 -39 51 -64 l45 -45 -5 -115 c-6 -124 -7 -121 50 -109 l29 5 -2 92 c-3 106 7 132 90 260 78 120 140 227 135 233 -12 11 -59 -21 -65 -45 -3 -14 -9 -28 -13 -31 -3 -3 -25 -40 -48 -83 -23 -44 -58 -98 -78 -122 l-36 -44 -69 70 c-38 39 -74 82 -81 97 -8 15 -23 28 -36 30 -13 2 -22 10 -22 20 0 9 -8 38 -17 65 -16 45 -28 53 -61 40z">
+                  </path>
+                  <path
+                    d="M643 251 c-24 -11 -37 -40 -27 -64 6 -16 39 -28 112 -43 17 -4 29 -10 26 -15 -7 -12 -91 -11 -113 1 -14 7 -20 4 -29 -15 -14 -30 -8 -34 65 -41 141 -15 184 92 47 117 -79 15 -80 32 -2 27 52 -3 69 -1 73 10 3 8 3 17 1 20 -10 9 -132 12 -153 3z">
+                  </path>
+                  <path
+                    d="M1090 165 c0 -95 0 -95 25 -95 24 0 25 3 25 63 l1 62 57 -63 c38 -42 64 -62 80 -62 21 0 22 3 22 95 0 95 0 95 -25 95 -23 0 -25 -3 -25 -52 l-1 -53 -48 53 c-38 42 -54 52 -79 52 l-32 0 0 -95z">
+                  </path>
+                  <path
+                    d="M1383 225 c-30 -30 -35 -40 -29 -68 7 -36 44 -74 82 -83 37 -9 134 5 134 20 0 19 -37 49 -45 37 -10 -17 -81 -13 -99 5 -21 20 -20 38 1 59 13 14 28 16 69 12 47 -5 53 -3 62 18 9 20 8 24 -11 29 -12 3 -46 6 -75 6 -48 0 -58 -4 -89 -35z">
+                  </path>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="d-flex flex-column justify-content-center text-dark">
+      <div class="container">
+        <div class="row justify-content-center text-center align-items-center">
+          <div class="col-xl-8 col-lg-9 col-md-10 layer-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+            <div class="text-muted pt-4" style="font-size: 3rem;font-weight: 250;line-height: 1.2;">
+              Sync on time,<br> Enrich your business.
+            </div>
+
+            <div class="custom-control custom-checkbox pt-5">
+              <input type="checkbox" class="custom-control-input" id="termsCheckBox">
+              <label class="custom-control-label" for="termsCheckBox">I agree to the <a href="#"
+                  onclick="openNewWindow('terms', 'OSyncTerms', 'https://www.oapps.xyz/terms', '');"> Terms and
+                  Conditions </a> & <a href="#"
+                  onclick="openNewWindow('terms', 'OSyncPrivacy', 'https://www.oapps.xyz/privacy', '');">Privacy
+                  Policy</a></label>
+            </div>
+
+            <button id="syncEnable" disabled="true" type="button"
+              class="btn btn-lg btn-primary mt-3 mb-5">Enable</button>
+            <div>
+              <p class="lead px-xl-5">
+                Save countless hours of syncing without any design and custom coding. Ship data between apps seamlessly,
+                in two-ways.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <div>
+      <svg height="140px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none"
+        class="bi bi-arrow-repeat text-secondary" width="100%" fill="currentColor">
+        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z">
+        </path>
+      </svg>
+    </div>
+  </div>
+
+  <div id="configPage" style="display: none;">
+    <main role="main" id="breadCrumbDiv" class="container d-flex p-2 justify-content-center sticky-top">
+      <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample10"
+          aria-controls="navbarsExample10" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample10">
+          <ul class="navbar-nav mr-auto">
+            <li style="cursor:pointer" class="breadcrumb-item">
+              <a id="serviceListBreadCrumb" source="serviceList_R" isAlreadyLoaded="false" onclick="initPage(this);"
+                class="bg_dummy_class">Authorize</a>
+            </li>
+            <li style="cursor:pointer" class="breadcrumb-item">
+              <a id="entityListBreadCrumb" source="entityList_R" isAlreadyLoaded="false" onclick="initPage(this);"
+                class="bg_dummy_class">Module
+                Map</a>
+            </li>
+            <li style="cursor:pointer" class="breadcrumb-item">
+              <a id="fieldMapListBreadCrumb" source="fieldMapList_R" isAlreadyLoaded="false" onclick="initPage(this);"
+                class="bg_dummy_class">Field Map </a>
+            </li>
+            <li style="cursor:pointer" class="breadcrumb-item">
+              <a id="syncConfListBreadCrumb" source="syncConfiguration_R" isAlreadyLoaded="false"
+                onclick="initPage(this);" class="bg_dummy_class">Sync Settings</a>
+            </li>
+            <li style="cursor:pointer" class="breadcrumb-item" aria-current="page">
+              <a id="syncReportBreadCrumb" source="syncReport_R" isAlreadyLoaded="false" onclick="initPage(this);"
+                class="bg_dummy_class">Sync
+                Health Report</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+    <div id="mainParentDiv" class="p-0 d-flex flex-column border-top">
+      <div id="showAlertMessage" class="d-flex justify-content-center sticky-top">
+      </div>
+      <div id="serviceList_R" type="settings"></div>
+      <div id="entityList_R" type="settings"></div>
+      <div id="fieldMapList_R" type="settings"></div>
+      <div id="syncConfiguration_R" type="settings"></div>
+      <div id="syncReport_R" type="settings"></div>
+      <div id="overAllSyncReport_R" type="settings"></div>
+      <div id="contactOsync" type="settings" class="text-center p-5" style="display: none;">
+        <script
+          src="https://desk.zoho.com/portal/api/feedbackwidget/356522000001086003?orgId=682656690&displayType=iframe">
+        </script>
+        <iframe id="zsfeedbackFrame" name="zsfeedbackFrame" scrolling="no" allowtransparency="false" frameborder="0"
+          border="0" src=""></iframe>
+      </div>
+      <div id="results" type="settings"></div>
+
+      <script type="x-tmpl-mustache" id="childOptionList">
+        <option value="" >None</option>
+          {{#childs}}
+             <option parentId="{{parentId}}" dataType="childPickList" value="{{displayName}}" ismandatory="{{mandatory}}">
+                {{displayName}}</option>
+          {{/childs}}
+  </script>
+    </div>
+  </div>
+  <!--script type="text/javascript">
+var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || 
+{widgetcode:"10284ad9a4a710c72a03f3133b5d8545831ea52f0fc9d88ac585484a50b79adf", values:{},ready:function(){}};
+var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;
+s.src="https://salesiq.zoho.com/widget";t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);d.write("<div id='zsiqwidget'></div>");
+</script-->
+</body>
+
+</html>

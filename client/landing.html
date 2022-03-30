@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+
+    <script aysnc="true" src="lib/mustache.min.js"></script>
+    <link rel="stylesheet" href="style/oSyncStyle.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"></script>
+
+    <script aysnc="true" src="lib/oSyncMappingSDK.js"></script>
+
+    <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+      <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> -->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OsyncClient</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script aysnc="true" src="lib/oSyncData.js"></script>
+    <script aysnc="true" src="lib/oSyncGlobalVariables.js"></script>
+    <script aysnc="true" src="lib/ServiceController.js"></script>
+    <script aysnc="true" src="lib/ZohoCRMController.js"></script>
+    <script aysnc="true" src="lib/FreshDeskController.js"></script>
+    <script aysnc="true" src="lib/DefaultController.js"></script>
+    <script aysnc="true" src="lib/ZohoEmbededAppSDK.min.js"></script>
+
+    <script aysnc="true" src="lib/oSyncUtils.js"></script>
+    <script aysnc="true" src="lib/osyncAuthPage.js"></script>
+    <script aysnc="true" src="lib/oSyncFieldMapPage.js"></script>
+    <script aysnc="true" src="lib/oSyncModulePage.js"></script>
+    <script aysnc="true" src="lib/oSyncReport.js"></script>
+    <script aysnc="true" src="lib/oSyncSettingsConf.js"></script>
+
+
+    <script>
+      window.onload = function () {
+
+      }
+    </script>
+
+  </head>
+
+<body>
+  <div>
+    <div class="">
+      <div class="text-dark d-flex justify-content-center">
+        <div class="container  d-flex  justify-content-center">
+          <div class="row d-flex align-items-stretch">
+            <div class="col-3" style="font-size: 5em;">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+                </path>
+                <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z">
+                </path>
+              </svg>
+            </div>
+            <div class="col position-relative top-2" style="font-family: monospace;">
+              <div style="font-size: 3em !important;top: 44px;position: relative;left: 30px;"> Sync </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="min-vh-80 o-hidden d-flex flex-column justify-content-center text-dark mt-5 pt-5">
+      <div class="container">
+        <div class="row justify-content-center text-center align-items-center">
+          <div class="col-xl-8 col-lg-9 col-md-10 layer-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="500">
+            <h1 class="display-3 text-muted">
+              Sync on time,<br>look on-trend.
+            </h1>
+            <div class="mb-4">
+              <p class="lead px-xl-5">
+                Save countless hours of syncing without any design and custom coding. Ship data between apps seamlessly on real time.
+              </p>
+            </div>
+            <button type="button" class="btn btn-lg btn-primary">Enable</button>
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="196px" viewBox="0 0 100 100" version="1.1" preserveAspectRatio="none" class="injected-svg" data-src="assets/img/dividers/divider-2.svg" width="100%">
+        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z">
+        </path>
+      </svg>
+
+    </div>
+  </div>
+</body>
+
+</html>

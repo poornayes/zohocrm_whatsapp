@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+</head>
+
+<body data-gr-c-s-loaded="true" style="overflow:hidden;height: 100%;">
+  <script type="x-tmpl-mustache" id="fieldMapList">
+      <div class="list-group-item" style="border: 0px;background: none;">
+        <div class="d-flex justify-content-center">
+          <div class="pt-1">
+            <!-- Title -->
+            <h5 class="mt-1">
+              <span>Map Fields</span>
+            </h5>
+            <!-- Time -->
+          </div><div class="col-auto">
+            <!-- Avatar -->
+            <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bag-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M14 5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5zM1 4v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4H1z"/>
+              <path d="M8 1.5A2.5 2.5 0 0 0 5.5 4h-1a3.5 3.5 0 1 1 7 0h-1A2.5 2.5 0 0 0 8 1.5z"/>
+              <path fill-rule="evenodd" d="M10.854 7.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 10.293l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="headerBottonLine"> </div>
+        
+      </div>
+      
+      <section id="tabs" class="project-tab h-100" >
+        <div class="container shadow p-0 w-75" id="inputElementsDiv">
+          <div class="container px-lg-5" align="center">
+            <div class="row mx-lg-n5 border shadow-sm">
+              <div class="col py-3 px-lg-5 border-right text-white bg-secondary">{{leftArgs.serviceName}} - {{leftArgs.moduleName}}</div>
+              <div class="col py-3 px-lg-5 text-white bg-secondary">{{rightArgs.serviceName}} - {{rightArgs.moduleName}} </div>
+            </div>
+            <input type="hidden" value="{{rightArgs.mandatory}}" name="rightMandatoryFields" id="rightMandatoryFields">
+          </div>
+          <div id="fieldData">
+            <div class="container">
+              
+              {{#leftArgs.data.textFields}} 
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="text" disabled isMandatory="{{mandatory}}" value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_text" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect" id="{{id}}_osyncRightField_text">
+                    <option value="" >None</option>
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                    
+                    {{#rightArgs.data.booleanFields}}
+                    <option dataType="boolean" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.booleanFields}}
+                    
+                    {{#rightArgs.data.numberFields}}
+                    <option dataType="number" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.numberFields}}
+                    
+                    {{#rightArgs.data.doubleFields}}
+                    <option dataType="double" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.doubleFields}}
+                    
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.textFields}}
+              
+              {{#leftArgs.data.booleanFields}}
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="boolean" disabled value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_boolean" type="text" class="form-control leftServiceInput" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect" id="{{id}}_osyncRightField_boolean">
+                    <option value="" >None</option>
+                    
+                    {{#rightArgs.data.booleanFields}}
+                    <option dataType="boolean" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.booleanFields}}
+                    
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                    
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.booleanFields}}
+              
+              {{#leftArgs.data.numberFields}}
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="number" disabled value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_number" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect" id="{{id}}_osyncRightField_number">
+                    <option value="" >None</option>
+                    
+                    {{#rightArgs.data.numberFields}}
+                    <option dataType="number" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.numberFields}}
+                    
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                    
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.numberFields}}
+              
+              {{#leftArgs.data.doubleFields}}
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="double" disabled value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_double" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect" id="{{id}}_osyncRightField_double">
+                    <option value="" >None</option>
+                    {{#rightArgs.data.doubleFields}}
+                    <option dataType="double" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.doubleFields}}
+                    
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                    
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.doubleFields}}
+
+             
+              
+              {{#leftArgs.data.dateFields}}
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="date" format="{{format}}" disabled value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_date" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect dateSelectElement" id="{{id}}_osyncRightField_date" name="dateSelectElement">
+                    <option value="" >None</option>
+                    
+                    {{#rightArgs.data.dateFields}}
+                    <option dataType="date" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.dateFields}}
+                    
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                    
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.dateFields}}
+              
+              {{#leftArgs.data.date_timeFields}}
+              <div class="row d-flex justify-content-center autoSuggestDummy">
+                <div class="col-4">
+                  <input dataType="date_time" format="{{format}}" disabled value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_date_time" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="col-2 oneWayFieldMapClass" oneWayFieldMapClass>&nbsp;</div>
+                <div class="col-4">
+                  <select class="custom-select rightServiceSelect" id="{{id}}_osyncRightField_date_time">
+                    <option value="" >None</option>
+                    {{#rightArgs.data.date_timeFields}}
+                    <option dataType="date_time" value="{{id}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.date_timeFields}}
+                    
+                    {{#rightArgs.data.textFields}}
+                    <option dataType="text" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                    <br>
+                    {{/rightArgs.data.textFields}}
+                  </select>
+                </div>
+                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                  </svg>
+                </div>
+              </div>
+              {{/leftArgs.data.date_timeFields}}
+
+              <div class="card">
+              <div class="card-header">
+                            Picklist Fields
+              </div>
+              {{#leftArgs.data.pickListFields}}
+              
+        <div class="card-body">
+            <section id="tabs" class="project-tab h-100">
+                <div id="">
+                    <div class="autoSuggestDummy" align="center">
+                        <div class="row border shadow-sm ">
+                            <div class="col py-3 px-lg-5 border text-left">
+                              
+                              <input disabled parentId="{{parentId}}" dataType="pickList" isMandatory="{{mandatory}}" value="{{displayName}}" name="{{id}}" id="{{id}}_osyncLeftField_pickList" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                            <div class="col py-3 px-lg-5 border text-left" style="width: 30px;">
+                             <select parentId="{{parentId}}" class="custom-select rightServiceSelect" leftPLId="{{id}}" id="{{parentId}}_osyncRightField_pickList" name="pickListParentSelect" onchange="populateChildFieldData(this)">
+                                      <option value="" >None</option>
+                                  {{#rightArgs.data.pickListFields}}
+                                      <option parentId="{{parentId}}" dataType="pickList" value="{{id}}" isMandatory="{{mandatory}}">{{displayName}}</option>
+                                  {{/rightArgs.data.pickListFields}}
+                                </select> </div>
+                        </div>
+                     
+                      
+                      <!--child_data-->
+                        <div id="{{parentId}}_childFieldData" class="border" style="display:none">
+                            <div class="row d-flex justify-content-center autoSuggestDummy m-1">
+                              {{#childs}}
+                                <div class="col-4" >
+                                    <input disabled parentId="{{parentId}}" dataType="childPickList" ismandatory="{{mandatory}}" value="{{displayName}}"
+                                        name="{{id}}" id="{{id}}_osyncLeftField_childPickList" type="text"
+                                        class="form-control" aria-label="Sizing example input"
+                                        aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="col-2 oneWayFieldMapClass">&nbsp;</div>
+                                <div class="col-4">
+                                    <select name="{{parentId}}_osyncRightField_childPickList" property="v12" id="{{id}}_osyncRightField_childPickList" class="custom-select rightServiceSelectChild {{id}}">
+                                      <option value=""> None </option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-1 d-flex justify-content-end pt-2" id="tickIcon">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill"
+                                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                {{/childs}}
+                            </div>
+                        </div>
+                        <!--child_data-->
+                    </div>
+                    <div class="alert alert-primary mt-4" role="alert" id="fieldAlert" style="display:none">
+                    </div>
+                </div>
+            </section>
+        </div>
+    
+              {{/leftArgs.data.pickListFields}}
+              </div>
+            </div>
+          </div>
+           {{#showNotNullInfo}}
+        <div class="alert alert-info alert-dismissible fade show  d-flex align-self-center" role="alert">
+                      <strong>Hey!</strong>&nbsp;
+                      Monday.com's 'Name' field should be mapped with non-nullable Fields. Please double check once!
+                    </div>
+        {{/showNotNullInfo}}
+          <div class="alert alert-primary mt-4" role="alert" id="fieldAlert" style="display:none">
+            
+        </div>
+       
+        {{#show_sync_conf}}
+          <table class="table" cellspacing="0" border="0" > 
+            <tr> <td colspan="3" class="pt-5">
+              <a id="saveFields" class="btn btn-lg btn-primary text-white mb-5" role="button">
+                <span class="mr-2 mb-1" role="status" aria-hidden="true"></span>
+                <medium class="pr-2"> Next</medium>
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                  <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+                  <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+                </svg></a>
+              </td>
+            </tr>
+          </table>
+          {{/show_sync_conf}}
+          {{^show_sync_conf}}
+          <table class="table" cellspacing="0" border="0" > 
+            <tr> <td colspan="3" class="pt-5">
+              <a id="fieldMapStartSync" class="btn btn-lg btn-primary text-white mb-5" role="button">
+          <span class="mr-2 mb-1" role="status" aria-hidden="true"></span>
+          <medium class="pr-2">Start Sync</medium>
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+            <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+            <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+          </svg></a>
+              </td>
+            </tr>
+          </table>
+          {{/show_sync_conf}}
+        </div>
+        
+        <!--button id="saveforLater" type="button" class="btn-sm btn-outline-success" style="float: right;margin-right: 0.5em;">Save for Later</button-->
+      </section>
+    </script>
+</body>
+
+</html>

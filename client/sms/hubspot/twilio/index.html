@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>bootstrap application form</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	
+	<style> 
+		::-webkit-scrollbar {
+			display: none;
+		}
+		#type{
+			border-bottom:none;
+			border-top:none;
+			border-right:none;
+			border-left:none;
+		}
+	</style> 
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+</head>
+<body>
+    test
+    <script> 
+            window.onload = function () {
+                test();
+                console.log("windw loading......");
+        };
+
+        function test(){
+     url = "https://api.hubapi.com/hubdb/api/v2/tables/4825152?portalId=9450301";
+
+             $.ajax({
+            url: url,
+            type: "GET",
+            crossDomain: true,
+            datatype: 'json',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Osync-Authorization': authHeader
+            },
+            success: function (response, textStatus, jqXHR) {
+                console.log("responseasdasdasdasdasdasdasda ::" +response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+            }
+        });
+        }
+    </script>
+    </body>
+</html>

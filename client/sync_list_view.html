@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+</head>
+
+<body data-gr-c-s-loaded="true" style="overflow:hidden;height: 100%;">
+  <script type="x-tmpl-mustache" id="overAllSyncReport">
+    <div class="container mt-5 w-50">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg">
+          <div class="d-flex justify-content-center"> <img src="img/{{service.leftImgName}}.png" style="width:75px; height:75px"> </div>
+          <div class="d-flex justify-content-center"> <h3 class="pt-3">{{service.leftServiceName}}</h3></div></div>
+          <div class="col-1 flex-column align-self-center d-flex text-muted" style="font-size: 40px;">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+              <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+            </svg>
+          </div>
+          <div class="col-sm">
+            <div class="d-flex justify-content-center"> <img src="img/{{service.rightImgName}}.png" style="width:75px; height:75px"> </div>
+            <div class="d-flex justify-content-center"> <h3 class="pt-3">{{service.rightServiceName}}</h3></div></div>
+          </div>
+        </div>
+        <div class="d-flex flex-row flex-wrap justify-content-center">
+          <div class="card m-5 w-50 shadow addModuleCardHover" style="max-width:200px" id="addModuleId">
+            <div class="card-body">
+              <div class="container">
+                <div style="font-size: 100px; text-align: center;opacity: .5;">+</div>
+                <div class="text-muted" style="text-align: center;">Map Module </div>
+              </div>
+            </div>
+          </div>
+          {{#integ}}
+          {{#leftModuleName}}
+          {{#integ_error}}
+          <div class="card m-5 w-50 error-shadow addModuleCardHover showDeleteBtn" style="max-width:200px">
+            {{/integ_error}}
+            {{^integ_error}}
+            <div class="card m-5 w-50 shadow addModuleCardHover showDeleteBtn" style="max-width:200px">
+              {{/integ_error}}
+              <div id="deleteButtonDiv" style="position: relative;bottom: 15px;left: 15px;">
+                <button type="button" class="float-right p-1 btn btn-outline-light bold intDelete" style="border-radius: 50%;width: 25px; height:25px" id="deleteIntegrationBtn" data-toggle="modal" data-target="#revokeConfirmationBox" data-action="delete" data-onclick="deleteIntegration(this);" data-integrationId={{integrationId}} aria-label="Close">
+                  <span aria-hidden="true" style="position: relative;bottom: 5px;">×</span>
+                </button>
+              </div>
+              <div class="col-sm text-right tsc_ribbon_wrap edge" style="border:none">
+                <div class="ribbon-wrap right-edge fork lblue"><span style="font-size: 12px;font-weight: bolder;">{{status}}</span></div>
+              </div>
+              <div class="card-body" id="_syncReport_" integrationId={{integrationId}}>
+
+                <div class="container">
+                  <div class="row pt-5 row-cols-1 d-flex justify-content-center">
+                    <div class="col text-center p-1 bg-transparent text-muted">
+                      <img src="img/{{service.leftImgName}}.png" style="width:20px; height:20px"> &nbsp; {{leftModuleName}}</div>
+                      <div class="col-5 text-center p-1 text-dark bg-light m-2" style="font-size: 0.75em;">
+                        {{#direction.bothWay}}
+                        <svg style="opacity:0.3" width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-arrow-left-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z"></path>
+                          <path fill-rule="evenodd" d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"></path>
+                          <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+                        </svg>
+                        {{/direction.bothWay}}
+
+                        {{#direction.leftOnly}}
+                        <svg style="opacity:0.3" width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                          <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                        {{/direction.leftOnly}}
+
+                        {{#direction.rightOnly}}
+
+
+                        <svg style="opacity:0.3" width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                          <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+                        </svg>
+                        {{/direction.rightOnly}}
+
+                      </div>
+                      <div class="col text-center p-1 text-muted">
+                        <img src="img/{{service.rightImgName}}.png" style="width:20px; height:20px"> &nbsp; {{rightModuleName}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="row" text-align="right">
+                      <div class="col-sm">
+                        {{#data_in_sync}}
+                        <small class="text-muted">Data in Sync - {{data_in_sync}}</small>
+                        {{/data_in_sync}}
+                        {{^data_in_sync}}
+                        <small class="text-muted">Pending</small>
+                        {{/data_in_sync}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{/leftModuleName}}
+                {{/integ}}
+              </div>
+            </script>
+          </body>
+
+          </html>

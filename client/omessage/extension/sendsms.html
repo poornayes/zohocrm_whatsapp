@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- <link rel="stylesheet" type="text/css" href="./css/plugin.css"> -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+  <!-- <link rel="stylesheet" href="./css/animation.css"> -->
+  <script aysnc="true" src="../authorize/lib/controller/ZohoCRMController.js"></script>
+  <script aysnc="true" src="../authorize/lib/controller/PipedriveController.js"></script>
+  <script aysnc="true" src="../authorize/lib/controller/SMSHandler.js"></script>
+  <script aysnc="true" src="../authorize/lib/controller/HubspotController.js"></script>
+  <script aysnc="true" src="../authorize/lib/SMSServiceController.js"></script>
+  <script aysnc="true" src="../authorize/lib/ZohoEmbededAppSDK.min.js"></script>
+  <style>
+    .sms-form-size {
+      margin-bottom: 0.5rem !important;
+    }
+  </style>
+</head>
+
+<body>
+  <script id="phone_template" type="x-tmpl-mustache">
+    <option> Choose from number</option>
+    {{#.}}
+        <option value="{{phone}}">{{phone}}</option>
+    {{/.}}    
+  </script>
+  </script>
+  <div class="justify-content-center" id="showSuccessMessage" style="display: none;">
+    <div class="alert alert-success w-25 text-center" role="alert">
+      SMS Sent successfully!
+    </div>
+  </div>
+  <div class="justify-content-center" id="showErrorMessage" style="display: none;">
+    <div class="alert alert-danger w-75 text-center" role="alert">
+      Something error happened! Please check the input values
+    </div>
+  </div>
+  <div class="container" id="loadingSpinner" style="padding-top: 30%;text-align: center;">
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+  <div id="loadSMSFormPage" class="container-fluid bd-example" style="display:none;font-size:12px;">
+    <div class="text-dark d-flex justify-content-center">
+      <div class="container  d-flex  justify-content-center">
+        <div class="row d-flex align-items-center">
+          <div class="col-3 mt-4">
+            <img src="../authorize/img/favicon.png" style="width:80px; height: 70px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group sms-form-size">
+      <label for="fromPhoneNumber" style="font-size: large;">From</label>
+      <button class="btn btn-outline-success" type="button" style="float: right; display:none;" onclick="addPhone(this,true)" id="addPhone">
+        <span class="" role="status" aria-hidden="true"></span> + Add Phone Number
+      </button>
+      <select class="form-control" style="width: 100%!important" name="dropdown-test" id="fromPhoneNumber"></select>
+      <div class="input-group-append" id="fromPhoneErrorDiv" style="display:none;font-size: 10px;color: red;">
+        From Number is not valid.
+      </div>
+    </div>
+
+    <div class="form-group sms-form-size">
+      <label for="toPhoneNumber" style="font-size: large;">To</label>
+      <input type="text" class="form-control" id="toPhoneNumber" placeholder="To">
+      <small id="toNumberHelp" class="form-text text-muted" style="font-size: 80% !important;">Include country code in
+        'To' number</small>
+      <div class="input-group-append" id="toPhoneErrorDiv" style="display:none;font-size: 10px;color: red;">
+        To Number is not valid.
+      </div>
+    </div>
+    <div class="form-group sms-form-size">
+      <label for="msgTosend" style="font-size: large;">Message</label>
+      <textarea class="form-control" onkeyup="updateTextCount()" onkeydown="updateTextCount()" id="msgTosend"
+        rows="3"></textarea>
+      <div class="input-group-append" id="msgToSendErrorDiv" style="display:none;font-size: 10px;color: red;">
+        Message body should not be empty.
+      </div>
+    </div>
+    <div id="textCount" class="float-right text-muted">0</div>
+    <button class="btn btn-outline-success" type="button" onclick="sendSMS(this,true)">
+      <span class="" role="status" aria-hidden="true"></span>
+      Send
+    </button>
+  </div>
+  <div id="forceAuthAction" class="align-items-center justify-content-center m-5 p-5 alert alert-primary w-75 text-center" role="alert" style="display:none;">
+      Aha.. Kindly authorise the services. Please go to <b>TwilioSMS</b> Webtab and Authorise the services and Configure Twilio numbers <br> <a href="https://youtu.be/WYtBeBwQ6S4" class="alert-link" target="_blank">Demo video</a>
+      <br> Already authorised and still facing issues, please contact <i>help@oapps.xyz</i>
+  </div>
+
+
+  <!-- <h2>OApps Twilio SMS Integration</h2> -->
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+  <script src="./lib/sendsms.js" charset="utf-8"></script>
+  <script aysnc="true" src="./lib/mustache.min.js"></script>
+  <script>
+    var providerObj = {};
+    window.onload = function () {
+      var urlParams = new URLSearchParams(window.location.search);
+      var service = $.trim(urlParams.get("service"));
+      providerObj = SMSServiceController.getAssigner(service);
+      providerObj.init().then(function () {
+        console.log("sendSMS init fn call");
+        getNumbers();
+      }).catch(function (err) {
+        console.log("in sendSMShtml Catch", err);
+        $("#loadingSpinner").hide();
+        $("#forceAuthAction").show();
+      });      
+    };
+  </script>
+</body>
+
+</html>

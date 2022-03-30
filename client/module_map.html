@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+</head>
+
+<body data-gr-c-s-loaded="true" style="overflow:hidden;height: 100%;">
+  <script type="x-tmpl-mustache" id="entityList">
+    <div class="list-group-item" style="border: 0px;background: none;">
+      <div class="d-flex justify-content-center">
+        <div class="pt-1">
+          <h5 class="mt-1">
+            <span>Map Module</span>
+          </h5>
+        </div><div class="col-auto">
+          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-bag-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M14 5H2v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5zM1 4v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4H1z"/>
+            <path d="M8 1.5A2.5 2.5 0 0 0 5.5 4h-1a3.5 3.5 0 1 1 7 0h-1A2.5 2.5 0 0 0 8 1.5z"/>
+            <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"/>
+            <path fill-rule="evenodd" d="M7.5 10a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-2z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="headerBottonLine"> </div>
+    </div>
+    <div class="container mt-2 w-75">
+      <div class="row d-flex justify-content-center text-center">
+        <div class="col-sm d-flex justify-content-end">
+          <div class="module-box shadow">
+            <img src="img/{{left.service_name}}.png"  style="width:55px; height:55px">
+            <h3 class="pt-3 pb-3 text-truncate  text-muted" style="max-width: 200px;"> {{left.service_display_name}} </h3>
+            <select class="custom-select1 mt-3" id="leftModule">
+              {{#left.modules}}
+              <option id="{{moduleId}}">{{name}}</option>
+              <br>
+              {{/left.modules}}
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm d-flex align-self-center justify-content-center">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <span class="badge badge-light directionSelector" data-toggle="tooltip" data-placement="bottom" title="One-way sync from {{left.service_display_name}} to {{right.service_display_name}}.">
+              <svg id="1" style="cursor:pointer;" width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+              </svg>
+            </span>
+            <span class="badge badge-secondary directionSelector" data-toggle="tooltip" data-placement="bottom" title="Two-way sync between {{left.service_display_name}} and {{right.service_display_name}}.">
+              <svg  id="3" style="cursor:pointer" width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-arrow-left-right selectedSpan" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                <path fill-rule="evenodd" d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </span>
+            <span class="badge badge-light directionSelector" data-toggle="tooltip" data-placement="bottom" title="One-way Sync from {{right.service_display_name}} to {{left.service_display_name}}.">
+              <svg id="2" style="cursor:pointer" width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                <path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+              </svg>
+            </span>
+            
+          </div>
+        </div>
+        <div class="col-sm d-flex justify-content-start">
+          <div class="module-box shadow">
+            <img src="img/{{right.service_name}}.png"  style="width:55px; height:55px">
+            <h3 class="pt-3 pb-3 text-truncate text-muted" style="max-width: 200px;">  {{right.service_display_name}} </h3>
+            <select class="custom-select1 mt-3" id="rightModule">
+              {{#right.modules}}
+              <option id="{{moduleId}}">{{name}}</option>
+              <br>
+              {{/right.modules}}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center text-center mt-2 pt-5">
+        <a id="showFieldList" class="btn btn-lg btn-primary text-white" role="button">
+          <span class="mr-2 mb-1" role="status" aria-hidden="true"></span>
+          <medium class="pr-2"> Next</medium>
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+            <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+            <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+          </svg>
+        </a>
+        
+      </div>
+    </div>
+    
+  </script>
+</body>
+
+</html>

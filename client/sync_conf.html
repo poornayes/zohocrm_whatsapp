@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAppS</title>
+</head>
+<body data-gr-c-s-loaded="true" style="overflow:hidden;height: 100%;">
+  <script type="x-tmpl-mustache" id="syncConfiguration">
+    <div class="list-group-item" style="border: 0px;background: none">
+      <div class="d-flex justify-content-center">
+        <div class="pt-1">
+          <h5 class="mt-1">
+            <span>Sync Settings</span>
+          </h5>
+        </div>
+        <div class="col-auto">
+          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-tools" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M0 1l1-1 3.081 2.2a1 1 0 0 1 .419.815v.07a1 1 0 0 0 .293.708L10.5 9.5l.914-.305a1 1 0 0 1 1.023.242l3.356 3.356a1 1 0 0 1 0 1.414l-1.586 1.586a1 1 0 0 1-1.414 0l-3.356-3.356a1 1 0 0 1-.242-1.023L9.5 10.5 3.793 4.793a1 1 0 0 0-.707-.293h-.071a1 1 0 0 1-.814-.419L0 1zm11.354 9.646a.5.5 0 0 0-.708.708l3 3a.5.5 0 0 0 .708-.708l-3-3z"/>
+            <path fill-rule="evenodd" d="M15.898 2.223a3.003 3.003 0 0 1-3.679 3.674L5.878 12.15a3 3 0 1 1-2.027-2.027l6.252-6.341A3 3 0 0 1 13.778.1l-2.142 2.142L12 4l1.757.364 2.141-2.141zm-13.37 9.019L3.001 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="headerBottonLine"> </div>
+    </div>
+    <div class="container d-flex justify-content-center flex-column">
+      <div class="row d-flex justify-content-center mt-2">
+        <div class="card text-center w-50 shadow h-75">
+          <div class="card-header">
+            Choose your master service
+          </div>
+          <div class="card-body text-left">
+            <div>
+              <div class="radio m-2">
+                <label class="w-100 text-muted">
+                  <input type="radio" id="{{left_service_id}}" name="masterSlave" value="{{left_service_name}}" checked="">
+                  <span style="margin: 5%;font-size: 1rem;"> Use {{left_service_name}} as Master </span>
+                </label>
+              </div>
+              <div class="radio m-2">
+                <label class="w-100 text-muted">
+                  <input type="radio" id="{{right_service_id}}" name="masterSlave" value="{{right_service_name}}">
+                  <span style="margin: 5%;font-size: 1rem;"> Use {{right_service_name}} as Master </span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-muted text-left">
+            <div style="">  <div class="container">
+              <div class="row d-flex flex-row align-items-center">
+                <div class="col-sm">
+                  <ul class="list-group list-group-flush">
+                    <li class=""><medium class="text-muted" style="font-size: 12px;"> In Two-Way Sync, during conflict case, OSync needs to know which service (master) data to keep for syncing. </medium></li>
+                    <li class=""><medium class="text-muted" style="font-size: 12px;"> Auto-sync cycle - every 60 mins</medium></li>
+                    <li class=""><medium class="text-muted" style="font-size: 12px;"> <p class="font-weight-bold"> If any built-in or third-party sync is already running </p> between these two services, please disable it before starting the sync. Otherwise, contacts could be duplicated.</medium></li>
+                    <li class=""><medium class="text-muted" style="font-size: 12px;"> <p class="font-weight-bold"> It's also important that you remove duplicates </p> before proceeding with the data sync. This will prevent duplicates from being synced from one service to the other.</medium></li>
+                    <li class=""><medium class="text-muted" style="font-size: 12px;"> Please note that <p class="font-weight-bold"> OSync will not delete contacts for you.</p>
+
+</medium></li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-center m-5">
+      <div class="col text-center">
+        <a id="startSync" class="btn btn-lg btn-primary text-white" role="button">
+          <span class="mr-2 mb-1" role="status" aria-hidden="true"></span>
+          <medium class="pr-2">Start Sync</medium>
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+            <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+            <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+          </svg></a>
+        </div>
+      </div>
+    </div>
+  </script>
+</body>
+</html>

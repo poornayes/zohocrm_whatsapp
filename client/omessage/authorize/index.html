@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OApps</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <link rel="stylesheet" href="../../style/oSyncStyle.css">
+  <link rel="stylesheet" href="lib/style/configuration.css">
+
+  <script aysnc="true" src="lib/mustache.min.js"></script>
+  <script aysnc="true" src="lib/utils/omessageGlobalVariables.js"></script>
+  <script aysnc="true" src="lib/controller/ZohoCRMController.js"></script>
+  <script aysnc="true" src="lib/controller/ZohoCRMWhatsappController.js"></script>
+  <script aysnc="true" src="lib/controller/HubspotController.js"></script>
+  <script aysnc="true" src="lib/controller/PipedriveController.js"></script>
+  <script aysnc="true" src="lib/controller/SMSHandler.js"></script>
+  <script aysnc="true" src="lib/controller/ShopifyController.js"></script>
+  <script aysnc="true" src="lib/SMSServiceController.js"></script>
+  <script aysnc="true" src="lib/authorize.js"></script>
+  <script aysnc="true" src="lib/ZohoEmbededAppSDK.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OsyncClient</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+  <script aysnc="true" src="./lib/mustache.min.js"></script>
+
+</head>
+
+<body>
+  <script id="phone_template" type="x-tmpl-mustache">
+    <option> Choose from number</option>
+    {{#.}}
+    <option value="{{phone}}">{{phone}}</option>
+    {{/.}}    
+  </script>
+
+  <script id="savedPhoneRow" type="x-tmpl-mustache">
+    <div class="container">
+      <div class="row">
+        {{#.}}
+          <div class="col-sm-6 col-lg-3">
+            <a data-friendlyName="{{friendlyName}}" data-phone="{{phoneNumber}}" data-ackmessage="{{acknowledgementEnabled}}" data-ackmessagetext="{{acknowledgement}}" class="card card-hover-shadow h-75 mb-3" href="#" data-title="Details" data-buttontxt="Update"> <!-- data-toggle="modal" data-target="#addPhoneNumberWidget"-->
+              <div class="card-body">
+                <h6 class="card-subtitle mb-1">{{friendlyName}}</h6>
+                
+                <span class="text-body text-sm-left ">{{phoneNumber}}</span>
+              </div>
+            </a>
+          </div>
+        {{/.}}
+      </div>
+      
+    </div>
+  </script>
+
+  <div class="modal fade" id="apiKeyModal" tabindex="-1" role="dialog" aria-labelledby="apiKeyModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLongTitle">Save Api key</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group" id="domainUrlInputDiv" style="display: none;">
+            <label for="domainUrlInput">Domain URL</label>
+            <input type="text" class="form-control" id="domainUrlInput" aria-describedby="domainUrlHelpLabel"
+              placeholder="Enter Domain URL">
+            <small id="domainUrlHelpLabel" class="form-text text-muted">Enter your URL https://xxx.yyy.com</small>
+          </div>
+          <div class="form-group" id="apiKeyInputDiv">
+            <label for="apiKeyInput">API Key</label>
+            <input type="text" class="form-control" id="apiKeyInput" aria-describedby="apiKeyHelpLabel"
+              placeholder="Enter API Key">
+            <small id="apiKeyHelpLabel" class="form-text text-muted">We'll never share your apikey with anyone
+              else.</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="apiKeySave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="configurationDiv" style="display: none;">
+    <div class="page-header ml-5 mr-5 mb-5">
+      <div class="row align-items-center">
+        <div class="col-sm mb-2 mb-sm-0">
+          <h1 class="page-header-title">
+            Phone Configuration
+          </h1>
+        </div>
+
+        <div class="col-sm-auto">
+          <button type="button" class="btn btn-primary btn-lg" style="display: block;" id="addPhoneNumberButton"
+            data-ticket="false" data-ackmessage="false"
+            data-ackmessagetext="SGkgdGhlcmUsClRoYW5rcyBmb3IgcmVhY2hpbmcgdXMuIApXZSB3aWxsIGdldCBiYWNrIHRvIHlvdSBzaG9ydGx5Lg=="
+            data-toggle="modal" data-target="#addPhoneNumberWidget" data-title="Associcate phone to Messaging Service"
+            data-buttontxt="Add">Add Phone</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="newMessageConfigDiv" class="d-flex justify-content-center">
+      <p class="text-center" id="emptyPhoneMessage" style="display: none;">No Phone numbers configured</p>
+    </div>
+    <div id="afterPhone" class="text-center" style="display:none!important">
+      <br />After Phone Number configuration, please goto Contacts/Leads/Accounts module for sending instant messages.
+    </div>
+
+    <div class="modal fade" id="addPhoneNumberWidget" tabindex="-1" role="dialog"
+      aria-labelledby="addPhoneNumberWidgetLabel" aria-hidden="true">
+
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <strong class="modal-title">Create new messaging service</strong>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <div id="friendlyNameDiv" class="form-group">
+              <label for="friendlyName" class="control-label labelHeader">Friendly Name</label>
+              <input type="email" class="form-control borderLightGrey" id="friendlyName"
+                aria-describedby="friendlyNameHelp" style="font-size: 0.75rem;">
+              <small id="friendlyNameHelp" style="font-size: 0.7rem!important;" class="form-text text-muted">For eg:
+                US Support , Sales etc</small>
+            </div>
+
+            <div class="row pb-3" id="createdTwilioDetails" style="display: none;">
+              <div class="col">
+                <div id="msgServiceIdDiv" class="form-group w-50 mt-4" style="display: none;">
+                  <label for="name" class="control-label labelHeader">Service SID</label>
+                  <p class="card-text" id="messagingServiceIdEdit"></p>
+                </div>
+              </div>
+              <div class="col">
+                <div id="notifyServiceIdDiv" class="form-group w-50 mt-4" style="display: none;">
+                  <label for="name" class="control-label labelHeader">Notify Service SID</label>
+                  <p class="card-text" id="notifyServiceIdEdit"></p>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-group pb-3">
+              <label for="recipient-name" class="control-label labelHeader">Phone Number:</label>
+              <select class="form-control" name="dropdown-test" id="twilioPhoneNumbers">
+
+              </select>
+              <div id="noPhoneNumbers" style="display: none !important; font-size: smaller;color: red;">
+                No Phone numbers found for this account.
+              </div>
+              <div id="selectWhatsApp" style="display: none !important; font-size: smaller;color: rgb(18, 129, 180);">
+                * Select WhatsApp enabled number.
+
+              </div>
+            </div>
+
+            <div class="row pb-3" style="display: none;">
+              <div class="col">
+                <div class="form-group">
+                  <label for="recipient-name" class="control-label labelHeader">Acknowledgment SMS</label>
+                  <label class="switch">
+                    <input type="checkbox" id="acknowledgmentInput" onclick="showSMSTemplateEditor()">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" id="smsTemplate" style="display: none;">
+              <label for="message-text" class="control-label labelHeader">Acknowledgement Message</label>
+              <textarea class="form-control" id="acknowledgementText">
+                </textarea>
+            </div>
+            <div class="form-group" style="display: none;">
+              <label for="recipient-name" class="col-form-label">Automate SMS</label>
+              <label class="switch">
+                <input type="checkbox" id="automateMessage" onclick="showAutomateSMSTemplateEditor()">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="form-group" id="automateSMSTemplate" style="display: none;">
+            </div>
+            <div class="form-group" id="showAutomateSMSTemplateEditor" style="display: none;">
+              <h4><small><span onclick="showAutomateSMSTemplateEditorOnEditPage(this)"
+                    style="color: #0000ffc2;text-decoration: underline;margin-top: 11px;padding-left: 15px;cursor: pointer;">Show
+                    Automate SMS Editor</span></small></h4>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger mr-auto btn-sm" id="deletePhoneNumber" action="delete"
+              style="display: none;">
+              <span class="" role="status" aria-hidden="true"></span>
+              Delete</button>
+            <medium id="errorTextMsg" class="form-text text-danger red-text text-wrap"></medium>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btn-sm" action="addOrUpdate" id="addPhoneNumber">
+              <span class="" role="status" aria-hidden="true"></span>
+              Save
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-success" id="installationCompletedPipeDriveSuccessfully"
+    style="font-size: 16px;margin-bottom: 15px;margin-left: 500px;display:none;">Successfully Configured, Please go to
+    your Pipedrive page to access Twilio App.</div>
+  </div>
+
+  <div id="enableDiv" style="display: block;">
+
+    <div id="landingPage">
+      <div class="box">
+        <div class="wave -one"></div>
+        <div class="wave -two"></div>
+        <div class="wave -three"></div>
+      </div>
+      <div>
+        <div class="text-dark d-flex justify-content-center">
+          <div class="container  d-flex  justify-content-center">
+            <div class="row d-flex align-items-center">
+              <div class="col-3 mt-4">
+                <img src="../../img/favicon.png" style="width:100px; height: 100px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="d-flex flex-column justify-content-center text-dark">
+        <div class="container">
+          <div class="row justify-content-center text-center align-items-center">
+            <div class="col-xl-8 col-lg-9 col-md-10 layer-3 aos-init aos-animate" data-aos="fade-up"
+              data-aos-delay="500">
+              <div>
+                <table class="table table-borderless" id="authorizeTable" style="text-align:center;" cellspacing="0">
+                  <tbody>
+                    <tr style="margin-left:20px;">
+                      <td>
+                        <div class="text-muted pt-4" style="font-size: 3rem;font-weight: 250;line-height: 1.2;"
+                          id="serviceName">
+                          Zoho CRM
+                        </div>
+                      </td>
+                      <td>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                          class="bi bi-arrow-left-right mt-4 ml-5" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd"
+                            d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z">
+                          </path>
+                        </svg>
+                      </td>
+                      <td>
+                        <div class="text-muted pt-4" style="font-size: 3rem;font-weight: 250;line-height: 1.2;"
+                          id="rightServiceName">
+                          WhatsApp
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <button id="syncEnable" type="button" class="btn btn-lg btn-primary mt-5 mb-5" onClick="showAuthPageHS()">
+                <span id="enableLoadingDiv" style="display:none;margin-bottom:1px;" class="spinner-grow spinner-grow-sm"
+                  role="status" aria-hidden="true"></span>
+                Enable
+              </button>
+              <div class="text-danger" id="enableFailed" style="font-size:18px;display:none;margin-top:-35px;">Failed!
+              </div>
+
+            </div>
+            <div>
+              <p class="lead px-xl-5">
+                Send instant messages to all your clients.
+              </p>
+            </div>
+
+          </div>
+        </div>
+    </div>
+    </section>
+    <div>
+      <svg style="bottom: 0px; position:fixed" height="140px" viewBox="0 0 100 100" version="1.1"
+        preserveAspectRatio="none" class="bi bi-arrow-repeat text-secondary" width="100%" fill="currentColor">
+        <path d="M0,0 C16.6666667,66 33.3333333,99 50,99 C66.6666667,99 83.3333333,66 100,0 L100,100 L0,100 L0,0 Z">
+        </path>
+      </svg>
+    </div>
+  </div>
+
+  </div>
+  <div id="authorizeDiv" style="display:none;">
+    <div id="list_R" type="settings"></div>
+    <script type="x-tmpl-mustache" id="list">
+    <div class="list-group-item" style="border: 0px;background: none;margin-top:50px;">
+      <div class="d-flex justify-content-center">
+        <div class="pt-1">
+          <h5 class="mt-1">
+            <span style="font-size:25px;">Authorize</span>
+          </h5>
+        </div>
+        
+        <div class="col-auto" style="margin-left:8px;">
+          <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-unlock" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M9.655 8H2.333c-.264 0-.398.068-.471.121a.73.73 0 0 0-.224.296 1.626 1.626 0 0 0-.138.59V14c0 .342.076.531.14.635.064.106.151.18.256.237a1.122 1.122 0 0 0 .436.127l.013.001h7.322c.264 0 .398-.068.471-.121a.73.73 0 0 0 .224-.296 1.627 1.627 0 0 0 .138-.59V9c0-.342-.076-.531-.14-.635a.658.658 0 0 0-.255-.237A1.122 1.122 0 0 0 9.655 8zm.012-1H2.333C.5 7 .5 9 .5 9v5c0 2 1.833 2 1.833 2h7.334c1.833 0 1.833-2 1.833-2V9c0-2-1.833-2-1.833-2zM8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <table class="table table-borderless" id="authorizeTable" style="margin-top:80px;text-align:center;" cellspacing="0" >
+        <tr style="margin-left:20px;">
+          <td id="leftButtonTd">
+            <img src="./img/{{left.service_name}}.png"  style="width:75px; height:75px" id="pipeImg">
+            <div class="mt-4" style="font-size:30px;"><b>{{left.service_display_name}}</b></div><br>
+            <br>
+            <div class="card-subtitle mb-2 text-muted pt-2" style="font-size:14px">We need permission to access your accounts.</div>
+            <div  id="leftButton" auth_type="{{left.auth.type}}" type="button"  name="{{left.service_id}}" class="btn btn-outline-primary mt-4 pt-2" data-isleft="true" url="{{left.auth.url}}" onClick="serviceAuth('leftButton')">
+              <span id="leftButtonLoadingDiv" style="display:none" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+              Authorize 
+              <div class="text-danger" id="leftButtonFailed" style="font-size:16px;display:none;">authorization Failed!.</div> 
+              
+            </div>
+            
+          </td>
+          <div>
+            {{#right.service_display_name}}
+            <td>
+              <img src="./img/{{right.service_name}}.png"  style="width:75px; height:75px">
+              <div class="mt-4" style="font-size:30px;"><b>{{right.service_display_name}}</b></div><br>
+              <br>
+              <div class="card-subtitle mb-2 text-muted pt-2" style="font-size:14px" >We need permission to access your accounts.</div>
+              <div  class="btn btn-outline-primary mt-4 pt-2" id="rightButton" auth_type="{{right.auth.type}}" name="{{right.service_id}}" onClick="serviceAuth('rightButton')"    data-isleft="false"  type="button"  url="{{right.auth.url}}" >
+                <span id="rightButtonLoadingDiv" style="display:none" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Authorize
+                <div class="text-danger" id="rightButtonFailed" style="font-size:16px;display:none;">authorization Failed!.</div> 
+                
+              </div>
+            </td>
+            {{/right.service_display_name}}
+          </div>
+        </tr>
+      </div>
+    </table>
+    
+    
+    <div style="text-align:center;margin-top:100px;" id="completeInstallationDiv">
+      <div href="" id="completeInstallation" osyncId="{{osync_id}}" hash="{{hash}}" integId="{{integId}}" onClick="completeInstallation(this)"  class="btn btn-lg btn-primary text-white" role="button">
+        <span id="completeInstallationLoadingDiv" style="display:none;margin-bottom:1px;" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        <medium class="pr-2">
+          Complete Installation
+        </medium>
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+          <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"></path>
+          <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"></path>
+        </svg>
+      </div>
+      <div class="text-success" id="installationCompletedSuccessfully" style="font-size:16px;display:none;margin-bottom:15px;">Successfully Configured, Please go to your {{left.service_name}} page to access Twilio App.</div> 
+      <div class="text-danger" id="installationFailed" style="font-size:16px;display:none;">Installation Failed!.</div>    
+    </div>
+  </script>
+  </div>
+  <script>
+    var providerObj = {};
+    var dataObj = {};
+    $(document).ready(function () {
+      var urlParamsObj = new URLSearchParams(window.location.search);
+      var serviceName = "Hubspot";
+      if (urlParamsObj.get("serviceName") != undefined) {
+        serviceName = urlParamsObj.get("serviceName");
+
+      }
+      var rightServiceName = "Twilio SMS";
+      if (urlParamsObj.get("rightServiceName") != undefined) {
+        rightServiceName = urlParamsObj.get("rightServiceName");
+      }
+
+      var displayName = "Hubspot";
+      var rightDisplayName = "Twilio SMS";
+
+      if (serviceName == "zc") {
+        providerObj = SMSServiceController.getAssigner(serviceName, rightServiceName);
+        displayName = providerObj.service;
+
+      } else if (serviceName == "pd") {
+        providerObj = SMSServiceController.getAssigner(serviceName, rightServiceName);
+        displayName = "Pipedrive";
+      } else if (serviceName == "hubspot") {
+        providerObj = SMSServiceController.getAssigner(serviceName, rightServiceName);
+        displayName = providerObj.service;
+      } else if (serviceName == "ShopRC") {
+        providerObj = SMSServiceController.getAssigner(serviceName, rightServiceName);
+        displayName = providerObj.service;
+      }
+      if (rightServiceName == "whatsapp") {
+        rightDisplayName = "WhatsApp";
+      }
+      providerObj.init().then(function () {
+        leftId = urlParams.get("leftServiceId");
+        rightId = urlParams.get("rightServiceId");
+        providerObj.checkIsAlreadyInstalled(rightServiceName, leftId, rightId).then(function (extensionData) {
+          //already installed. 
+          $("#enableDiv").hide();
+          $("#configurationDiv").show();
+          if (serviceName == "zc") {
+            $("#afterPhone").show();
+          }
+          integId = extensionData.integId;
+          hash = extensionData.hash;
+          providerObj.getSavedNumbers();
+
+        }).catch(function () {
+          //not installed 
+          console.log("not installed....catch");
+          if (rightServiceName === "oapps") {
+            rightDisplayName = "OAppS"
+          }
+          $("#serviceName").text(displayName);
+          $("#rightServiceName").text(rightDisplayName);
+          $("#enableDiv").show();
+        });
+        bindClickEvents();
+      }).catch(function () {
+        console.log("eroor hdasfasdf");
+        if (rightServiceName === "oapps") {
+          rightDisplayName = "OAppS"
+        }
+        $("#serviceName").text(displayName);
+        $("#rightServiceName").text(rightDisplayName);
+        $("#enableDiv").show();
+      });
+
+
+
+    });
+  </script>
+
+</body>
+
+</html>
